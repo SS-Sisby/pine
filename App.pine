@@ -1,0 +1,24 @@
+   strategy("Sisby", overlay=true, pyramiding=0)
+    SL = input.float(0.5, "Stop loss", minval=0.1, maxval=100, step=0.1)
+    TP = input.float(1, "Take profit", minval=0.1, maxval=100,step=0.1)
+    var count = 0
+    longLong = strategy.closedtrades.size(0)>=0
+    if longLong
+    count := count + 1
+    plot(count)
+    longStop = strategy.position_avg_price*(100-SL)/100
+    longProfit = strategy.position_avg_price*(100+TP)/100
+    if trend_strength > 0
+        if Greenbar1 and Greenbar2 == 1 ? RsiMa2 - 50 : na
+            if direction < 0 ? supertrend : na
+                strategy.entry("Long", strategy.long, na)
+    strategy.exit("Close","Long", stop=longStop, limit=longProfit, 
+    when=strategy.position_size>=0)
+    shortStop = strategy.position_avg_price*(100+SL)/100
+    shortProfit = strategy.position_avg_price*(100-TP)/100
+    if trend_strength < 0
+         if Redbar1 and Redbar2 == 1 ? RsiMa2 - 50 : na
+            if direction < 0? na : supertrend
+                strategy.entry("Short", strategy.short, na)
+    strategy.exit("exit","Short", stop=shortStop,limit=shortProfit, 
+    when=strategy.position_size<=0)
